@@ -1,0 +1,50 @@
+﻿@using EPiServer.Web.Mvc.Html
+@model EpiPageImporter.Models.Pages.RecipePage
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@Model.RecipeName</h1>
+
+@if (Model.Image != null)
+{
+    <img src="@Url.ContentUrl(Model.Image)" alt="@Model.RecipeName" />
+}
+
+<h2>Ingredients</h2>
+@if (Model.Ingredients != null && Model.Ingredients.Count > 0)
+{
+    <ul>
+        @foreach (var ingredient in Model.Ingredients)
+        {
+            <li>@ingredient</li>
+        }
+    </ul>
+}
+
+<h2>Instructions</h2>
+@if (Model.Instructions != null )
+{
+    <div>
+        @Html.PropertyFor(x => Model.Instructions)
+    </div>
+}
+
+<p><strong>Prep Time:</strong> @Model.PrepTimeMinutes min</p>
+<p><strong>Cook Time:</strong> @Model.CookTimeMinutes min</p>
+<p><strong>Servings:</strong> @Model.Servings</p>
+<p><strong>Difficulty:</strong> @Model.Difficulty</p>
+<p><strong>Cuisine:</strong> @Model.Cuisine</p>
+<p><strong>Calories per Serving:</strong> @Model.CaloriesPerServing</p>
+<p><strong>Rating:</strong> @Model.Rating (@Model.ReviewCount reviews)</p>
+
+@if (Model.Tags != null && Model.Tags.Count > 0)
+{
+    <p><strong>Tags:</strong> @string.Join(", ", Model.Tags)</p>
+}
+
+@if (Model.MealType != null && Model.MealType.Count > 0)
+{
+    <p><strong>Meal Type:</strong> @string.Join(", ", Model.MealType)</p>
+}

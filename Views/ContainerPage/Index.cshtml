@@ -1,0 +1,99 @@
+@model EpiPageImporter.Controllers.ContainerListingViewModel
+@inject EPiServer.Web.Routing.UrlResolver UrlResolver
+
+@{
+    var currentUrl = Model.CurrentPage is not null
+        ? UrlResolver.GetUrl(Model.CurrentPage.ContentLink) ?? "/"
+        : "/";
+    var page = Math.Max(1, Model.Page);
+    var totalPages = Model.TotalPages;
+}
+
+<div class="container-page-listing">
+    @if (!string.IsNullOrWhiteSpace(Model.CurrentPage?.Intro))
+    {
+        <div class="listing-intro">
+            @Html.Raw(System.Net.WebUtility.HtmlEncode(Model.CurrentPage.Intro).Replace("\n", "<br />"))
+        </div>
+    }
+
+    @if (!Model.Recipes.Any())
+    {
+        <p>No recipes available.</p>
+    }
+    else
+    {
+        <ul class="recipe-list">
+            @foreach (var recipe in Model.Recipes)
+            {
+                var recipeUrl = UrlResolver.GetUrl(recipe.ContentLink) ?? "#";
+                var imageUrl = recipe.Image != null ? UrlResolver.GetUrl(recipe.Image) : null;
+                <li class="recipe-item">
+                    @if (!string.IsNullOrEmpty(imageUrl))
+                    {
+                        <a class="recipe-thumb" href="@recipeUrl">
+                            <img src="@imageUrl" alt="@Html.Encode(recipe.RecipeName ?? recipe.Name)" style="max-width:120px;max-height:90px;" />
+                        </a>
+                    }
+                    <div class="recipe-meta">
+                        <h3 class="recipe-title"><a href="@recipeUrl">@Html.Encode(recipe.RecipeName ?? recipe.Name)</a></h3>
+
+                        <div class="recipe-details">
+                            @if (recipe.PrepTimeMinutes > 0)
+                            {
+                                <span class="prep-time">Prep: @recipe.PrepTimeMinutes min</span>
+                            }
+                            @if (recipe.CookTimeMinutes > 0)
+                            {
+                                <span class="cook-time">Cook: @recipe.CookTimeMinutes min</span>
+                            }
+                            <span class="servings">Servings: @recipe.Servings</span>
+                            @if (!string.IsNullOrEmpty(recipe.Difficulty))
+                            {
+                                <span class="difficulty">Difficulty: @Html.Encode(recipe.Difficulty)</span>
+                            }
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(recipe.Instructions?.ToHtmlString()))
+                        {
+                            <div class="recipe-excerpt">
+                                @Html.Raw(recipe.Instructions.ToHtmlString())
+                            </div>
+                        }
+                    </div>
+                </li>
+            }
+        </ul>
+
+        @if (totalPages > 1)
+        {
+            <nav class="pagination" aria-label="Recipe listing pagination">
+                <ul>
+                    @{
+                        var start = Math.Max(1, page - 2);
+                        var end = Math.Min(totalPages, page + 2);
+                        if (page > 1)
+                        {
+                            <li class="page-prev"><a href="@($"{currentUrl}?page={page - 1}")">Previous</a></li>;
+                        }
+                        for (var p = start; p <= end; p++)
+                        {
+                            if (p == page)
+                            {
+                                <li class="page-number current">@p</li>;
+                            }
+                            else
+                            {
+                                <li class="page-number"><a href="@($"{currentUrl}?page={p}")">@p</a></li>;
+                            }
+                        }
+                        if (page < totalPages)
+                        {
+                            <li class="page-next"><a href="@($"{currentUrl}?page={page + 1}")">Next</a></li>;
+                        }
+                    }
+                </ul>
+            </nav>
+        }
+    }
+</div>
