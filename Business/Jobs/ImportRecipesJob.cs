@@ -1,4 +1,4 @@
-﻿using EpiPageImporter.Business.Models;
+﻿using EpiPageImporter.Business.Models.Dtos;
 using EpiPageImporter.Models.Media;
 using EpiPageImporter.Models.Pages;
 using EPiServer.DataAccess;
@@ -15,7 +15,7 @@ namespace EpiPageImporter.Business.Jobs
 {
     [ScheduledPlugIn(
         DisplayName = "Recipe Import Job",
-        Description = "Imports recipes from dummyjson.com and creates or updates RecipePages under the Start Page.")]
+        Description = "Imports recipes from dummyjson.com and creates a structure of containerpages and recipepages under the startpage")]
     public class RecipeImportJob : ScheduledJobBase
     {
         private bool _stopRequested = false;
@@ -28,7 +28,7 @@ namespace EpiPageImporter.Business.Jobs
         public RecipeImportJob(
             IContentRepository contentRepository,
             IBlobFactory blobFactory,
-            ISiteDefinitionResolver siteDefinitionResolver,
+            ISiteDefinitionResolver siteDefinitionResolver, 
             CategoryRepository categoryRepository)
         {
             _contentRepository = contentRepository;
@@ -64,7 +64,7 @@ namespace EpiPageImporter.Business.Jobs
             {
                 if (_stopRequested) break;
 
-                var containerRef = GetOrCreateCuisineContainer(dto.Cuisine, startPage.ContentLink);
+                var containerRef = GetOrCreateCuisineContainer(dto.Cuisine ?? "Other", startPage.ContentLink);
                 var existing = FindExistingRecipePage(dto.Id, containerRef);
 
                 if (existing != null)
@@ -148,8 +148,8 @@ namespace EpiPageImporter.Business.Jobs
         {
             try
             {
-                using var client = new WebClient();
-                byte[] newData = client.DownloadData(url);
+                using var http = new HttpClient();
+                byte[] newData = http.GetByteArrayAsync(url).Result;
 
                 var existingData = ReadExistingImage(currentImage);
 
@@ -222,9 +222,6 @@ namespace EpiPageImporter.Business.Jobs
 
         private ContentReference GetOrCreateCuisineContainer(string cuisine, ContentReference startPageRef)
         {
-            if (string.IsNullOrWhiteSpace(cuisine))
-                cuisine = "Other";
-
             var existing = _contentRepository
                 .GetChildren<ContainerPage>(startPageRef)
                 .FirstOrDefault(x => x.Name.Equals(cuisine, StringComparison.OrdinalIgnoreCase));

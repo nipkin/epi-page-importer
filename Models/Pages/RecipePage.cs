@@ -7,7 +7,7 @@ namespace EpiPageImporter.Models.Pages
        DisplayName = "Recipe Page",
        GUID = "b3f1ba55-3b63-4ac9-ba9a-3e5ae5345cc3",
        Description = "A page representing a recipe imported from an external source.")]
-    public class RecipePage : PageData
+    public class RecipePage : BasePageData
     {
         [Display(
             Name = "External Recipe ID", 

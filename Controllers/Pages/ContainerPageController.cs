@@ -1,8 +1,9 @@
 using EpiPageImporter.Models.Pages;
+using EpiPageImporter.Models.ViewModels;
 using EPiServer.Web.Mvc;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EpiPageImporter.Controllers
+namespace EpiPageImporter.Controllers.Pages
 {
     public class ContainerPageController(IContentLoader contentLoader) : PageController<ContainerPage>
     {
@@ -27,7 +28,7 @@ namespace EpiPageImporter.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            var model = new ContainerListingViewModel
+            var model = new ContainerPageViewModel(currentPage)
             {
                 CurrentPage = currentPage,
                 Recipes = pagedRecipes,

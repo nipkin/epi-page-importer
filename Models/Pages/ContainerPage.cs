@@ -7,7 +7,7 @@ namespace EpiPageImporter.Models.Pages
         GUID = "2f7c9d6a-8e4b-4c2b-9a6f-1a4d5e7b3c20",
         Description = "A listing page that contains RecipePage children.")]
     [AvailableContentTypes(Include = new[] { typeof(RecipePage) })]
-    public class ContainerPage : PageData
+    public class ContainerPage : BasePageData
     {
         [Display(
             Name = "Intro",

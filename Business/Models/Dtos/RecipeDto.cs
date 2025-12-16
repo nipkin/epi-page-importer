@@ -1,4 +1,4 @@
-﻿namespace EpiPageImporter.Business.Models
+﻿namespace EpiPageImporter.Business.Models.Dtos
 {
     public class RecipeDto
     {

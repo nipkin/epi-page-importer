@@ -1,8 +1,11 @@
+using EpiPageImporter.Business;
+using EpiPageImporter.Business.Helpers;
 using EPiServer.Cms.Shell;
 using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EpiPageImporter;
 
@@ -25,10 +28,14 @@ public class Startup
         }
 
         services
+                   .AddTransient<MenuHelper>()
+            .Configure<MvcOptions>(options => options.Filters.Add<PageContextActionFilter>())
             .AddCmsAspNetIdentity<ApplicationUser>()
             .AddCms()
             .AddAdminUserRegistration()
             .AddEmbeddedLocalization<Startup>();
+     
+         
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

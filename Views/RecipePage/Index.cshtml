@@ -1,22 +1,22 @@
 ﻿@using EPiServer.Web.Mvc.Html
-@model EpiPageImporter.Models.Pages.RecipePage
+@model EpiPageImporter.Models.ViewModels.RecipePageViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>@Model.RecipeName</h1>
+<h1>@Model.CurrentPage.RecipeName</h1>
 
-@if (Model.Image != null)
+@if (Model.CurrentPage.Image != null)
 {
-    <img src="@Url.ContentUrl(Model.Image)" alt="@Model.RecipeName" />
+    <img src="@Url.ContentUrl(Model.CurrentPage.Image)" alt="@Model.CurrentPage.RecipeName" />
 }
 
 <h2>Ingredients</h2>
-@if (Model.Ingredients != null && Model.Ingredients.Count > 0)
+@if (Model.CurrentPage.Ingredients != null && Model.CurrentPage.Ingredients.Count > 0)
 {
     <ul>
-        @foreach (var ingredient in Model.Ingredients)
+        @foreach (var ingredient in Model.CurrentPage.Ingredients)
         {
             <li>@ingredient</li>
         }
@@ -24,27 +24,27 @@
 }
 
 <h2>Instructions</h2>
-@if (Model.Instructions != null )
+@if (Model.CurrentPage.Instructions != null )
 {
     <div>
-        @Html.PropertyFor(x => Model.Instructions)
+        @Html.PropertyFor(x => Model.CurrentPage.Instructions)
     </div>
 }
 
-<p><strong>Prep Time:</strong> @Model.PrepTimeMinutes min</p>
-<p><strong>Cook Time:</strong> @Model.CookTimeMinutes min</p>
-<p><strong>Servings:</strong> @Model.Servings</p>
-<p><strong>Difficulty:</strong> @Model.Difficulty</p>
-<p><strong>Cuisine:</strong> @Model.Cuisine</p>
-<p><strong>Calories per Serving:</strong> @Model.CaloriesPerServing</p>
-<p><strong>Rating:</strong> @Model.Rating (@Model.ReviewCount reviews)</p>
+<p><strong>Prep Time:</strong> @Model.CurrentPage.PrepTimeMinutes min</p>
+<p><strong>Cook Time:</strong> @Model.CurrentPage.CookTimeMinutes min</p>
+<p><strong>Servings:</strong> @Model.CurrentPage.Servings</p>
+<p><strong>Difficulty:</strong> @Model.CurrentPage.Difficulty</p>
+<p><strong>Cuisine:</strong> @Model.CurrentPage.Cuisine</p>
+<p><strong>Calories per Serving:</strong> @Model.CurrentPage.CaloriesPerServing</p>
+<p><strong>Rating:</strong> @Model.CurrentPage.Rating (@Model.CurrentPage.ReviewCount reviews)</p>
 
-@if (Model.Tags != null && Model.Tags.Count > 0)
+@if (Model.CurrentPage.Tags != null && Model.CurrentPage.Tags.Count > 0)
 {
-    <p><strong>Tags:</strong> @string.Join(", ", Model.Tags)</p>
+    <p><strong>Tags:</strong> @string.Join(", ", Model.CurrentPage.Tags)</p>
 }
 
-@if (Model.MealType != null && Model.MealType.Count > 0)
+@if (Model.CurrentPage.MealType != null && Model.CurrentPage.MealType.Count > 0)
 {
-    <p><strong>Meal Type:</strong> @string.Join(", ", Model.MealType)</p>
+    <p><strong>Meal Type:</strong> @string.Join(", ", Model.CurrentPage.MealType)</p>
 }
