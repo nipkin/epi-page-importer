@@ -1,7 +1,6 @@
 ﻿@model EpiPageImporter.Models.ViewModels.IPageViewModel<EpiPageImporter.Models.Pages.BasePageData>
-@{
-    var test = Model.Layout.MainMenu;
-}
+@using EPiServer.Web.Mvc.Html
+
 <!DOCTYPE html>
 
 <html>
@@ -11,7 +10,8 @@
 </head>
 <body>
     <header>
-        @test
+        @Url.ContentUrl(Model.Layout.StartPageLink)
+        @Model.Layout.MainMenu
     </header>
     <div>
         @RenderBody()

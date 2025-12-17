@@ -27,7 +27,8 @@ namespace EpiPageImporter.Business
 
             return new LayoutModel
             {
-                MainMenu = _menuHelper.RenderContentTree(startPage.ContentLink)
+                MainMenu = _menuHelper.RenderContentTree(startPage.ContentLink),
+                StartPageLink = startPage.ContentLink
             };
         }
     }

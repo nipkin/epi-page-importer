@@ -41,14 +41,4 @@ namespace EpiPageImporter.Controllers.Pages
             return View(model);
         }
     }
-
-    public class ContainerListingViewModel
-    {
-        public ContainerPage? CurrentPage { get; set; }
-        public IEnumerable<RecipePage> Recipes { get; set; } = Array.Empty<RecipePage>();
-        public int Page { get; set; }
-        public int PageSize { get; set; }
-        public int TotalItems { get; set; }
-        public int TotalPages { get; set; }
-    }
 }

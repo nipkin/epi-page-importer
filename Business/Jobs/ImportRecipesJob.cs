@@ -8,7 +8,6 @@ using EPiServer.Scheduler;
 using EPiServer.Security;
 using EPiServer.Web;
 using Newtonsoft.Json;
-using System.Net;
 using System.Security.Cryptography;
 
 namespace EpiPageImporter.Business.Jobs
