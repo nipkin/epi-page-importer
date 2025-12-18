@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Html;
 using System.Text;
 
-namespace EpiPageImporter.Business.Helpers
+namespace EpiPageImporter.Business.Services
 {
-    public class MenuHelper(IContentRepository contentRepo, UrlResolver urlResolver)
+    public class MenuService(IContentRepository contentRepo, UrlResolver urlResolver)
     {
         private readonly IContentRepository _contentRepo = contentRepo;
         private readonly UrlResolver _urlResolver = urlResolver;

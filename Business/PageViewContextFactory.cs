@@ -1,4 +1,4 @@
-﻿using EpiPageImporter.Business.Helpers;
+﻿using EpiPageImporter.Business.Services;
 using EpiPageImporter.Models.Pages;
 using EpiPageImporter.Models.ViewModels;
 using EPiServer.ServiceLocation;
@@ -9,10 +9,10 @@ namespace EpiPageImporter.Business
     [ServiceConfiguration]
     public class PageViewContextFactory(
         IContentLoader contentLoader,
-         MenuHelper menuHelper)
+         MenuService menuHelper)
     {
         private readonly IContentLoader _contentLoader = contentLoader;
-        private readonly MenuHelper _menuHelper = menuHelper;
+        private readonly MenuService _menuHelper = menuHelper;
 
         public virtual LayoutModel CreateLayoutModel(ContentReference currentContentLink, HttpContext httpContext)
         {

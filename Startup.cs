@@ -1,5 +1,5 @@
 using EpiPageImporter.Business;
-using EpiPageImporter.Business.Helpers;
+using EpiPageImporter.Business.Services;
 using EPiServer.Cms.Shell;
 using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Scheduler;
@@ -28,10 +28,12 @@ public class Startup
         }
 
         services
-                   .AddTransient<MenuHelper>()
+            .AddTransient<MenuService>()
+            .AddScoped<SearchService>()
             .Configure<MvcOptions>(options => options.Filters.Add<PageContextActionFilter>())
             .AddCmsAspNetIdentity<ApplicationUser>()
             .AddCms()
+            .AddFind()
             .AddAdminUserRegistration()
             .AddEmbeddedLocalization<Startup>();
      

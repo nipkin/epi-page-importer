@@ -1,0 +1,20 @@
+﻿.autocomplete {
+    position: absolute;
+    background: white;
+    border: 1px solid #ccc;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.autocomplete li a {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: black;
+}
+
+.autocomplete li a:hover {
+    background: #f0f0f0;
+}
