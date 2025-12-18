@@ -19,7 +19,6 @@ namespace EpiPageImporter.Business.Services
             var results = await _findClient
                 .Search<RecipePage>()
                 .For(query)
-                .Filter(x => x.MatchType(typeof(RecipePage)))
                 .FilterForVisitor()
                 .Take(maxResults).GetContentResultAsync();
 
