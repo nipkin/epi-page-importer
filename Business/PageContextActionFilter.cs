@@ -6,14 +6,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace EpiPageImporter.Business
 {
-    public class PageContextActionFilter : IResultFilter
+    public class PageContextActionFilter(PageViewContextFactory contextFactory) : IResultFilter
     {
-        private readonly PageViewContextFactory _contextFactory;
-
-        public PageContextActionFilter(PageViewContextFactory contextFactory)
-        {
-            _contextFactory = contextFactory;
-        }
+        private readonly PageViewContextFactory _contextFactory = contextFactory;
 
         public void OnResultExecuting(ResultExecutingContext context)
         {

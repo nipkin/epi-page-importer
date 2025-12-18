@@ -1,4 +1,5 @@
 using EpiPageImporter.Business;
+using EpiPageImporter.Business.Mapping;
 using EpiPageImporter.Business.Services;
 using EPiServer.Cms.Shell;
 using EPiServer.Cms.UI.AspNetIdentity;
@@ -30,14 +31,16 @@ public class Startup
         services
             .AddTransient<MenuService>()
             .AddScoped<SearchService>()
+            .AddScoped<RecipeImportService>()
+            .AddScoped<RecipePageMapper>()
+            .AddScoped<CuisineService>()
+            .AddScoped<RecipeImageService>()
             .Configure<MvcOptions>(options => options.Filters.Add<PageContextActionFilter>())
             .AddCmsAspNetIdentity<ApplicationUser>()
             .AddCms()
             .AddFind()
             .AddAdminUserRegistration()
             .AddEmbeddedLocalization<Startup>();
-     
-         
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
