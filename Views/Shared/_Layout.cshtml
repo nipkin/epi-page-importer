@@ -15,12 +15,10 @@
         <div class="container">
             <div class="top-header">    
                 <a class="start-page__link" href="@Url.ContentUrl(Model.Layout.StartPageLink)">Start</a>
-         
-                    <div class="search-container">
-                        <input type="text" id="recipe-search" placeholder="Search recipes..." />
-                        <ul id="recipe-results" class="autocomplete"></ul>
-                    </div>
-             
+                <div class="search-container">
+                    <input type="text" id="recipe-search" placeholder="Search recipes..." />
+                    <ul id="recipe-results" class="autocomplete"></ul>
+                </div>
             </div>
             @Model.Layout.MainMenu
         </div>

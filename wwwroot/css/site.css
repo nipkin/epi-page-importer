@@ -26,7 +26,6 @@ input {
 }
 
 a {
-    font-size: 18px;
     color: #000;
     text-decoration: none;
 }
@@ -95,10 +94,6 @@ a:hover {
 
 .autocomplete li:hover {
     background: #f0f0f0;
-}
-
-.recipe-results {
-
 }
 
 .main-menu {
@@ -178,6 +173,12 @@ a:hover {
         display: block;
     }
 
+    .recipe-item img {
+        max-width: 300px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
     .recipe-page__top {
         display: block;
     }
@@ -192,11 +193,5 @@ a:hover {
 
     .recipe-page__top ul {
         padding-left: 18px;
-    }
-
-    .recipe-item img {
-        max-width: 300px;
-        width: 100%;
-        margin-bottom: 20px;
     }
 }
