@@ -23,33 +23,3 @@ input.addEventListener("input", function () {
             });
     }, 300);
 });
-
-
-const burger = document.querySelector(".hamburger");
-const menu = document.querySelector(".main-menu");
-
-burger.addEventListener("click", () => {
-    burger.classList.toggle("active");
-    menu.classList.toggle("show");
-});
-
-// Mobile submenu toggle
-menu.querySelectorAll("li > a").forEach(link => {
-    link.addEventListener("click", e => {
-        const parent = link.parentElement;
-        if (parent.querySelector("ul") && window.innerWidth < 900) {
-            e.preventDefault();
-            parent.classList.toggle("open");
-        }
-    });
-});
-
-
-function myFunction() {
-    var x = document.getElementById("myTopnav");
-    if (x.className === "main-menu") {
-        x.className += " responsive";
-    } else {
-        x.className = "main-menu";
-    }
-}
