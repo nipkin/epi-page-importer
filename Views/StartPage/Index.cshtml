@@ -1,8 +1,13 @@
-﻿@using EpiPageImporter.Models.Pages
+﻿@using EPiServer.Web.Mvc.Html
+@using EpiPageImporter.Models.Pages
 @model EpiPageImporter.Models.ViewModels.StartPageViewModel
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
+<h2>
+    @Model.CurrentPage.Heading
+</h2>
+@if (Model.CurrentPage.Intro != null)
+{
+    <div>
+        @Html.PropertyFor(x => Model.CurrentPage.Intro)
+    </div>
 }
-
-<h1>Welcome to the Start Page</h1>

@@ -1,4 +1,6 @@
-﻿namespace EpiPageImporter.Models.Pages
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EpiPageImporter.Models.Pages
 {
     [ContentType(
         DisplayName = "Start Page",
@@ -6,5 +8,16 @@
         Description = "The homepage of the website.")]
     public class StartPage : BasePageData
     {
+        [Display(
+            Name = "Heading",
+            GroupName = SystemTabNames.Content,
+            Order = 10)]
+        public virtual string? Heading { get; set; }
+
+        [Display(
+            Name = "Intro",
+            GroupName = SystemTabNames.Content,
+            Order = 20)]
+        public virtual XhtmlString? Intro { get; set; }
     }
 }

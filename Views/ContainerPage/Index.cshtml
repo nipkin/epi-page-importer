@@ -33,7 +33,7 @@
                     @if (!string.IsNullOrEmpty(imageUrl))
                     {
                         <a class="recipe-thumb" href="@recipeUrl">
-                            <img src="@imageUrl" alt="@Html.Encode(recipe.RecipeName ?? recipe.Name)" style="max-width:120px;max-height:90px;" />
+                            <img src="@imageUrl" alt="@Html.Encode(recipe.RecipeName ?? recipe.Name)" />
                         </a>
                     }
                     <div class="recipe-meta">

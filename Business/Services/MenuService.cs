@@ -4,19 +4,22 @@ using System.Text;
 
 namespace EpiPageImporter.Business.Services
 {
-    public class MenuService(IContentRepository contentRepo, UrlResolver urlResolver)
+    public class MenuService(IContentRepository contentRepo, UrlResolver urlResolver, IPageRouteHelper pageRouteHelper)
     {
         private readonly IContentRepository _contentRepo = contentRepo;
         private readonly UrlResolver _urlResolver = urlResolver;
+        private readonly IPageRouteHelper _pageRouteHelper = pageRouteHelper;
 
         public IHtmlContent RenderContentTree(ContentReference root, int maxDepth = 3)
         {
+            var currentPage = _pageRouteHelper.Page;
+
             var sb = new StringBuilder();
-            Build(root, 0, maxDepth, sb);
+            Build(root, currentPage, 0, maxDepth, sb);
             return new HtmlString(sb.ToString());
         }
 
-        private void Build(ContentReference parent, int depth, int maxDepth, StringBuilder sb)
+        private void Build(ContentReference parent, PageData currentPage, int depth, int maxDepth, StringBuilder sb)
         {
             if (depth >= maxDepth) return;
 
@@ -27,18 +30,27 @@ namespace EpiPageImporter.Business.Services
             {
                 if (!any)
                 {
-                    sb.Append("<ul>");
+                    sb.Append("<ul class=\"main-menu\">");
                     any = true;
                 }
 
                 var url = _urlResolver.GetUrl(child.ContentLink);
+                var isCurrent = currentPage != null && child.ContentLink.CompareToIgnoreWorkID(currentPage.ContentLink);
 
-                sb.Append("<li>");
+                if(isCurrent)
+                {
+                    sb.Append("<li class=\"active\">");
+                }
+                else
+                {
+                    sb.Append("<li>");
+                }
+                   
                 sb.AppendFormat("<a href=\"{0}\">{1}</a>",
                     url,
                     System.Net.WebUtility.HtmlEncode(child.Name));
 
-                Build(child.ContentLink, depth + 1, maxDepth, sb);
+         
 
                 sb.Append("</li>");
             }

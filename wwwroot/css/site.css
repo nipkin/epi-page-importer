@@ -1,11 +1,89 @@
-﻿.autocomplete {
-    position: absolute;
+﻿body {
+    margin-bottom: 50px;
+    font-size: 18px;
+}
+
+p, a {
+    line-height: 24px;
+}
+
+header {
+    padding: 10px 0;
+  
+}
+
+header a {
+     margin: auto 0;
+}
+
+input {
+    height: 32px;
+    border-radius: 9px;
+    border: 1px solid grey;
+    padding: 5px 10px;
+    margin: auto 0;
+    width: calc(100% - 20px);
+}
+
+a {
+    font-size: 18px;
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover {
+    color: grey;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+    font-family: Arial, sans-serif;
+}
+
+.top-header {
+    display: flex;
+    min-height: 80px;
+}
+
+.search-container {
+    position: relative;
+    margin-left: 20px;
+    max-width: 650px;
+    flex-grow: 1;
+    height: 100%;
+    margin: auto 0;
+}
+
+.top-header .search-container {
+    margin-left: 20px;
+}
+
+.autocomplete {
     background: white;
-    border: 1px solid #ccc;
+    position: absolute;
     list-style: none;
     padding: 0;
     margin: 0;
     width: 100%;
+}
+
+.autocomplete li:first-child {
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+}
+
+.autocomplete li:last-child {
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
+}
+
+.autocomplete li {
+
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
 }
 
 .autocomplete li a {
@@ -15,6 +93,110 @@
     color: black;
 }
 
-.autocomplete li a:hover {
+.autocomplete li:hover {
     background: #f0f0f0;
+}
+
+.recipe-results {
+
+}
+
+.main-menu {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+}
+
+.main-menu li {
+    margin-right: 15px;
+}
+
+.active a {
+    text-decoration: underline;
+}
+
+.recipe-list {
+    list-style: none;
+    padding: 0;
+}
+
+.recipe-list li {
+    border-bottom: 1px solid #ccc;
+    padding: 25px 0;
+}
+
+.pagination ul {
+    display: flex;
+    margin: 0 auto;
+    justify-content: center;
+    list-style: none;
+}
+
+.pagination ul li {
+    margin-right: 15px;
+}
+
+.page-number.current {
+    font-size: 18px;
+    color: grey;
+    text-decoration: underline;
+}
+
+.recipe-page__top {
+    display: flex;
+}
+
+.recipe-page__top div,
+.recipe-page__top img {
+    width: 50%;
+}
+
+.recipe-page__top h2 {
+    margin: 0 0 20px 24px;
+}
+
+.recipe-item {
+    display: flex;
+    gap: 20px;
+}
+
+.recipe-item img {
+    width: 200px;
+}
+
+.recipe-meta h3 {
+    margin: 0 0 13px;
+}
+
+.recipe-meta div {
+    margin: 0 0 13px;
+}
+
+@media (max-width: 624px){
+    .recipe-item {
+        display: block;
+    }
+
+    .recipe-page__top {
+        display: block;
+    }
+
+    .recipe-page__top img {
+        width: 100%;
+    }
+
+    .recipe-page__top h2 {
+        margin-left: 0; 
+    }
+
+    .recipe-page__top ul {
+        padding-left: 18px;
+    }
+
+    .recipe-item img {
+        max-width: 300px;
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }

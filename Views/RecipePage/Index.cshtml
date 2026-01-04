@@ -1,50 +1,47 @@
 ﻿@using EPiServer.Web.Mvc.Html
 @model EpiPageImporter.Models.ViewModels.RecipePageViewModel
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-<h1>@Model.CurrentPage.RecipeName</h1>
-
-@if (Model.CurrentPage.Image != null)
-{
-    <img src="@Url.ContentUrl(Model.CurrentPage.Image)" alt="@Model.CurrentPage.RecipeName" />
-}
-
-<h2>Ingredients</h2>
-@if (Model.CurrentPage.Ingredients != null && Model.CurrentPage.Ingredients.Count > 0)
-{
-    <ul>
-        @foreach (var ingredient in Model.CurrentPage.Ingredients)
+<div class="recipe-page">
+    <h1>@Model.CurrentPage.RecipeName</h1>
+    <div class="recipe-page__top">
+        @if (Model.CurrentPage.Image != null)
         {
-            <li>@ingredient</li>
+            <img src="@Url.ContentUrl(Model.CurrentPage.Image)" alt="@Model.CurrentPage.RecipeName" />
         }
-    </ul>
-}
+        <div>
+            <h2>Ingredients</h2>
+            @if (Model.CurrentPage.Ingredients != null && Model.CurrentPage.Ingredients.Count > 0)
+            {
+                <ul>
+                    @foreach (var ingredient in Model.CurrentPage.Ingredients)
+                    {
+                        <li>@ingredient</li>
+                    }
+                </ul>
+            }
 
-<h2>Instructions</h2>
-@if (Model.CurrentPage.Instructions != null )
-{
-    <div>
-        @Html.PropertyFor(x => Model.CurrentPage.Instructions)
+        </div>
     </div>
-}
-
-<p><strong>Prep Time:</strong> @Model.CurrentPage.PrepTimeMinutes min</p>
-<p><strong>Cook Time:</strong> @Model.CurrentPage.CookTimeMinutes min</p>
-<p><strong>Servings:</strong> @Model.CurrentPage.Servings</p>
-<p><strong>Difficulty:</strong> @Model.CurrentPage.Difficulty</p>
-<p><strong>Cuisine:</strong> @Model.CurrentPage.Cuisine</p>
-<p><strong>Calories per Serving:</strong> @Model.CurrentPage.CaloriesPerServing</p>
-<p><strong>Rating:</strong> @Model.CurrentPage.Rating (@Model.CurrentPage.ReviewCount reviews)</p>
-
-@if (Model.CurrentPage.Tags != null && Model.CurrentPage.Tags.Count > 0)
-{
-    <p><strong>Tags:</strong> @string.Join(", ", Model.CurrentPage.Tags)</p>
-}
-
-@if (Model.CurrentPage.MealType != null && Model.CurrentPage.MealType.Count > 0)
-{
-    <p><strong>Meal Type:</strong> @string.Join(", ", Model.CurrentPage.MealType)</p>
-}
+    <h2>Instructions</h2>
+    @if (Model.CurrentPage.Instructions != null)
+    {
+        <div>
+            @Html.PropertyFor(x => Model.CurrentPage.Instructions)
+        </div>
+    }
+    <p><strong>Prep Time:</strong> @Model.CurrentPage.PrepTimeMinutes min</p>
+    <p><strong>Cook Time:</strong> @Model.CurrentPage.CookTimeMinutes min</p>
+    <p><strong>Servings:</strong> @Model.CurrentPage.Servings</p>
+    <p><strong>Difficulty:</strong> @Model.CurrentPage.Difficulty</p>
+    <p><strong>Cuisine:</strong> @Model.CurrentPage.Cuisine</p>
+    <p><strong>Calories per Serving:</strong> @Model.CurrentPage.CaloriesPerServing</p>
+    <p><strong>Rating:</strong> @Model.CurrentPage.Rating (@Model.CurrentPage.ReviewCount reviews)</p>
+    @if (Model.CurrentPage.Tags != null && Model.CurrentPage.Tags.Count > 0)
+    {
+        <p><strong>Tags:</strong> @string.Join(", ", Model.CurrentPage.Tags)</p>
+    }
+    @if (Model.CurrentPage.MealType != null && Model.CurrentPage.MealType.Count > 0)
+    {
+        <p><strong>Meal Type:</strong> @string.Join(", ", Model.CurrentPage.MealType)</p>
+    }
+</div>
