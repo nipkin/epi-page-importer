@@ -1,6 +1,9 @@
 App_Data/
 node_modules/
 artifacts/
+appsettings.json
+appsettings.*.json
+!appsettings.*.example.json
 
 # Visual Studio files
 *.user
@@ -15,8 +18,6 @@ obj/
 # Optimizely files
 *license.config
 modules/
-appsettings.json
-appsettings.*.json
 
 # OS crap
 .DS_Store
