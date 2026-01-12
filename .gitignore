@@ -1,9 +1,8 @@
 App_Data/
 node_modules/
 artifacts/
-appsettings.json
-appsettings.*.json
-!appsettings.*.example.json
+appsettings*.json
+!appsettings*.example.json
 
 # Visual Studio files
 *.user
