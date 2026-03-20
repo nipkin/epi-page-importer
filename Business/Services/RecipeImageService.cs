@@ -1,4 +1,4 @@
-﻿using EpiPageImporter.Models.Media;
+using EpiPageImporter.Models.Media;
 using EPiServer.DataAccess;
 using EPiServer.Framework.Blobs;
 using EPiServer.Security;
@@ -9,17 +9,19 @@ namespace EpiPageImporter.Business.Services;
 
 public class RecipeImageService(
     IContentRepository contentRepository,
-    IBlobFactory blobFactory)
+    IBlobFactory blobFactory,
+    IHttpClientFactory httpClientFactory)
 {
     private readonly IContentRepository _contentRepository = contentRepository;
     private readonly IBlobFactory _blobFactory = blobFactory;
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
 
-    public ContentReference? Import(string? url, ContentReference current)
+    public async Task<ContentReference?> ImportAsync(string? url, ContentReference current)
     {
         if (string.IsNullOrEmpty(url)) return current;
 
-        using var http = new HttpClient();
-        var data = http.GetByteArrayAsync(url).Result;
+        var http = _httpClientFactory.CreateClient();
+        var data = await http.GetByteArrayAsync(url);
 
         if (IsSameAsExisting(current, data))
             return current;
@@ -42,11 +44,7 @@ public class RecipeImageService(
             return false;
 
         using var s = img.BinaryData.OpenRead();
-        using var ms = new MemoryStream();
-        s.CopyTo(ms);
-
-        return SHA256.HashData(ms.ToArray())
-            .SequenceEqual(SHA256.HashData(data));
+        return SHA256.HashData(s).SequenceEqual(SHA256.HashData(data));
     }
 
     private ContentReference GetOrCreateFolder()

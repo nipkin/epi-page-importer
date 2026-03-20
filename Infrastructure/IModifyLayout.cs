@@ -1,6 +1,6 @@
 ﻿using EpiPageImporter.Models.ViewModels;
 
-namespace EpiPageImporter.Business
+namespace EpiPageImporter.Infrastructure
 {
     internal interface IModifyLayout
     {

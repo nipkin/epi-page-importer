@@ -1,4 +1,4 @@
-﻿using EpiPageImporter.Business.Services;
+using EpiPageImporter.Business.Services;
 using EPiServer.PlugIn;
 using EPiServer.Scheduler;
 
@@ -16,6 +16,11 @@ public class RecipeImportJob(RecipeImportService importService) : ScheduledJobBa
 
     public override string Execute()
     {
-        return _importService.Run(() => _stopRequested);
+        // ScheduledJobBase.Execute() is synchronous. Task.Run ensures the async work
+        // runs on a thread-pool thread with no ambient synchronization context,
+        // preventing potential deadlocks from .GetAwaiter().GetResult().
+        return Task.Run(() => _importService.RunAsync(() => _stopRequested))
+                   .GetAwaiter()
+                   .GetResult();
     }
 }

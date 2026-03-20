@@ -1,6 +1,6 @@
-using EpiPageImporter.Business;
 using EpiPageImporter.Business.Mapping;
 using EpiPageImporter.Business.Services;
+using EpiPageImporter.Infrastructure;
 using EPiServer.Cms.Shell;
 using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Scheduler;
@@ -29,7 +29,8 @@ public class Startup
         }
 
         services
-            .AddTransient<MenuService>()
+            .AddHttpClient()
+            .AddTransient<NavigationRenderer>()
             .AddScoped<SearchService>()
             .AddScoped<RecipeImportService>()
             .AddScoped<RecipePageMapper>()

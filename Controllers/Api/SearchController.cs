@@ -1,6 +1,5 @@
-﻿using EpiPageImporter.Business.Services;
+using EpiPageImporter.Business.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace EpiPageImporter.Controllers.Api
 {
@@ -10,9 +9,17 @@ namespace EpiPageImporter.Controllers.Api
     {
         private readonly SearchService _searchService = searchService;
 
+        private const int MaxQueryLength = 200;
+
         [HttpGet]
         public async Task<IActionResult> Search(string q)
         {
+            if (string.IsNullOrWhiteSpace(q))
+                return BadRequest("Query must not be empty.");
+
+            if (q.Length > MaxQueryLength)
+                return BadRequest($"Query must not exceed {MaxQueryLength} characters.");
+
             var results = await _searchService.SearchRecipes(q);
             return Ok(results);
         }
