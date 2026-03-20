@@ -1,10 +1,10 @@
-﻿using EPiServer.Web.Routing;
+using EPiServer.Web.Routing;
 using Microsoft.AspNetCore.Html;
 using System.Text;
 
-namespace EpiPageImporter.Business.Services
+namespace EpiPageImporter.Infrastructure
 {
-    public class MenuService(IContentRepository contentRepo, UrlResolver urlResolver, IPageRouteHelper pageRouteHelper)
+    public class NavigationRenderer(IContentRepository contentRepo, UrlResolver urlResolver, IPageRouteHelper pageRouteHelper)
     {
         private readonly IContentRepository _contentRepo = contentRepo;
         private readonly UrlResolver _urlResolver = urlResolver;
@@ -19,7 +19,7 @@ namespace EpiPageImporter.Business.Services
             return new HtmlString(sb.ToString());
         }
 
-        private void Build(ContentReference parent, PageData currentPage, int depth, int maxDepth, StringBuilder sb)
+        private void Build(ContentReference parent, PageData? currentPage, int depth, int maxDepth, StringBuilder sb)
         {
             if (depth >= maxDepth) return;
 
@@ -37,7 +37,7 @@ namespace EpiPageImporter.Business.Services
                 var url = _urlResolver.GetUrl(child.ContentLink);
                 var isCurrent = currentPage != null && child.ContentLink.CompareToIgnoreWorkID(currentPage.ContentLink);
 
-                if(isCurrent)
+                if (isCurrent)
                 {
                     sb.Append("<li class=\"active\">");
                 }
@@ -45,12 +45,12 @@ namespace EpiPageImporter.Business.Services
                 {
                     sb.Append("<li>");
                 }
-                   
+
                 sb.AppendFormat("<a href=\"{0}\">{1}</a>",
                     url,
                     System.Net.WebUtility.HtmlEncode(child.Name));
 
-         
+                Build(child.ContentLink, currentPage, depth + 1, maxDepth, sb);
 
                 sb.Append("</li>");
             }

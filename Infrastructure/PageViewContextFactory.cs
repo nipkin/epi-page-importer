@@ -1,18 +1,17 @@
-﻿using EpiPageImporter.Business.Services;
-using EpiPageImporter.Models.Pages;
+﻿using EpiPageImporter.Models.Pages;
 using EpiPageImporter.Models.ViewModels;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
 
-namespace EpiPageImporter.Business
+namespace EpiPageImporter.Infrastructure
 {
     [ServiceConfiguration]
     public class PageViewContextFactory(
         IContentLoader contentLoader,
-         MenuService menuHelper)
+        NavigationRenderer navigationRenderer)
     {
         private readonly IContentLoader _contentLoader = contentLoader;
-        private readonly MenuService _menuHelper = menuHelper;
+        private readonly NavigationRenderer _navigationRenderer = navigationRenderer;
 
         public virtual LayoutModel CreateLayoutModel(ContentReference currentContentLink, HttpContext httpContext)
         {
@@ -27,7 +26,7 @@ namespace EpiPageImporter.Business
 
             return new LayoutModel
             {
-                MainMenu = _menuHelper.RenderContentTree(startPage.ContentLink),
+                MainMenu = _navigationRenderer.RenderContentTree(startPage.ContentLink),
                 StartPageLink = startPage.ContentLink
             };
         }

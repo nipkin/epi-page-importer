@@ -1,10 +1,11 @@
-﻿using EpiPageImporter.Models.Pages;
+﻿using EpiPageImporter.Infrastructure;
+using EpiPageImporter.Models.Pages;
 using EpiPageImporter.Models.ViewModels;
 using EPiServer.Web.Routing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace EpiPageImporter.Business
+namespace EpiPageImporter.Infrastructure
 {
     public class PageContextActionFilter(PageViewContextFactory contextFactory) : IResultFilter
     {

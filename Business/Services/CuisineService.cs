@@ -1,4 +1,4 @@
-﻿using EpiPageImporter.Models.Pages;
+using EpiPageImporter.Models.Pages;
 using EPiServer.DataAccess;
 using EPiServer.Security;
 
@@ -11,23 +11,29 @@ public class CuisineService(
     private readonly IContentRepository _contentRepository = contentRepository;
     private readonly CategoryRepository _categoryRepository = categoryRepository;
 
-    public ContentReference GetOrCreateCuisineContainer(string cuisine, ContentReference startPage)
+    private static readonly object _lock = new();
+
+    public ContentReference GetOrCreateCuisineContainer(string? cuisine, ContentReference startPage)
     {
         cuisine ??= "Other";
-        int categoryId = GetOrCreateCuisineCategory(cuisine);
 
-        var existing = _contentRepository
-            .GetChildren<ContainerPage>(startPage)
-            .FirstOrDefault(x => x.Name.Equals(cuisine, StringComparison.OrdinalIgnoreCase));
+        lock (_lock)
+        {
+            int categoryId = GetOrCreateCuisineCategory(cuisine);
 
-        if (existing != null)
-            return existing.ContentLink;
+            var existing = _contentRepository
+                .GetChildren<ContainerPage>(startPage)
+                .FirstOrDefault(x => x.Name.Equals(cuisine, StringComparison.OrdinalIgnoreCase));
 
-        var container = _contentRepository.GetDefault<ContainerPage>(startPage);
-        container.Name = cuisine;
-        container.Category.Add(categoryId);
+            if (existing != null)
+                return existing.ContentLink;
 
-        return _contentRepository.Save(container, SaveAction.Publish, AccessLevel.NoAccess);
+            var container = _contentRepository.GetDefault<ContainerPage>(startPage);
+            container.Name = cuisine;
+            container.Category.Add(categoryId);
+
+            return _contentRepository.Save(container, SaveAction.Publish, AccessLevel.NoAccess);
+        }
     }
 
     public void AssignCuisineCategory(RecipePage page, string? cuisine)

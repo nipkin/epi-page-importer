@@ -1,4 +1,4 @@
-﻿using EpiPageImporter.Business.Mapping;
+using EpiPageImporter.Business.Mapping;
 using EpiPageImporter.Business.Models.Dtos;
 using EpiPageImporter.Models.Pages;
 using EPiServer.DataAccess;
@@ -10,57 +10,78 @@ namespace EpiPageImporter.Business.Services;
 
 public class RecipeImportService(
     IContentRepository contentRepository,
-    ISiteDefinitionResolver siteResolver,
     CuisineService cuisineService,
-    RecipePageMapper mapper)
+    RecipePageMapper mapper,
+    IHttpClientFactory httpClientFactory,
+    ILogger<RecipeImportService> logger)
 {
     private readonly IContentRepository _contentRepository = contentRepository;
-    private readonly ISiteDefinitionResolver _siteResolver = siteResolver;
     private readonly CuisineService _cuisineService = cuisineService;
     private readonly RecipePageMapper _mapper = mapper;
+    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+    private readonly ILogger<RecipeImportService> _logger = logger;
 
-    public string Run(Func<bool> stopRequested)
+    private const int RecipeLimit = 20;
+
+    public async Task<string> RunAsync(Func<bool> stopRequested)
     {
-        var recipes = FetchRecipes();
+        IEnumerable<RecipeDto> recipes;
+        try
+        {
+            recipes = await FetchRecipesAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to fetch recipes from external API.");
+            return "Import failed: could not fetch recipes.";
+        }
+
         if (!recipes.Any())
             return "No recipes found.";
 
-        var site = _siteResolver.GetByHostname("localhost:5000", false);
-        var startPage = _contentRepository.Get<StartPage>(site.StartPage);
+        var startPage = _contentRepository.Get<StartPage>(SiteDefinition.Current.StartPage);
 
-        int created = 0, updated = 0;
+        int created = 0, updated = 0, failed = 0;
 
         foreach (var dto in recipes)
         {
             if (stopRequested()) break;
 
-            var container = _cuisineService.GetOrCreateCuisineContainer(dto.Cuisine, startPage.ContentLink);
-            var existing = FindExisting(dto.Id, container);
+            try
+            {
+                var container = _cuisineService.GetOrCreateCuisineContainer(dto.Cuisine, startPage.ContentLink);
+                var existing = FindExisting(dto.Id, container);
 
-            if (existing != null)
-            {
-                var clone = existing.CreateWritableClone() as RecipePage;
-                _mapper.Map(dto, clone);
-                _contentRepository.Save(clone, SaveAction.Publish, AccessLevel.NoAccess);
-                updated++;
+                if (existing != null)
+                {
+                    var clone = existing.CreateWritableClone() as RecipePage;
+                    await _mapper.MapAsync(dto, clone!);
+                    _contentRepository.Save(clone!, SaveAction.Publish, AccessLevel.NoAccess);
+                    updated++;
+                }
+                else
+                {
+                    var page = _contentRepository.GetDefault<RecipePage>(container);
+                    page.ExternalRecipeId = dto.Id;
+                    await _mapper.MapAsync(dto, page);
+                    _contentRepository.Save(page, SaveAction.Publish, AccessLevel.NoAccess);
+                    created++;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var page = _contentRepository.GetDefault<RecipePage>(container);
-                page.ExternalRecipeId = dto.Id;
-                _mapper.Map(dto, page);
-                _contentRepository.Save(page, SaveAction.Publish, AccessLevel.NoAccess);
-                created++;
+                _logger.LogError(ex, "Failed to import recipe {RecipeId} ({RecipeName}).", dto.Id, dto.Name);
+                failed++;
             }
         }
 
-        return $"Recipes imported. Created: {created}, Updated: {updated}.";
+        return $"Recipes imported. Created: {created}, Updated: {updated}, Failed: {failed}.";
     }
 
-    private IEnumerable<RecipeDto> FetchRecipes()
+    private async Task<IEnumerable<RecipeDto>> FetchRecipesAsync()
     {
-        using var client = new HttpClient();
-        var json = client.GetStringAsync("https://dummyjson.com/recipes?limit=20").Result;
+        var client = _httpClientFactory.CreateClient();
+        var json = await client.GetStringAsync($"https://dummyjson.com/recipes?limit={RecipeLimit}");
 
         return JsonConvert.DeserializeObject<RecipeListWrapper>(json)?.Recipes
                ?? Enumerable.Empty<RecipeDto>();

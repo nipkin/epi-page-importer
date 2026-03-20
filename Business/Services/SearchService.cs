@@ -11,7 +11,9 @@ namespace EpiPageImporter.Business.Services
         private readonly IClient _findClient = findClient;
         private readonly UrlResolver _urlResolver = urlResolver;
 
-        public async Task<IEnumerable<RecipeSearchHit>> SearchRecipes(string query, int maxResults = 8)
+        private const int DefaultMaxResults = 8;
+
+        public async Task<IEnumerable<RecipeSearchHit>> SearchRecipes(string query, int maxResults = DefaultMaxResults)
         {
             if (string.IsNullOrWhiteSpace(query))
                 return Enumerable.Empty<RecipeSearchHit>();
