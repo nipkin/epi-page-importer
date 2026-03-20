@@ -10,12 +10,14 @@ namespace EpiPageImporter.Business.Services;
 
 public class RecipeImportService(
     IContentRepository contentRepository,
+    ISiteDefinitionRepository siteDefinitionRepository,
     CuisineService cuisineService,
     RecipePageMapper mapper,
     IHttpClientFactory httpClientFactory,
     ILogger<RecipeImportService> logger)
 {
     private readonly IContentRepository _contentRepository = contentRepository;
+    private readonly ISiteDefinitionRepository _siteDefinitionRepository = siteDefinitionRepository;
     private readonly CuisineService _cuisineService = cuisineService;
     private readonly RecipePageMapper _mapper = mapper;
     private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
@@ -39,7 +41,9 @@ public class RecipeImportService(
         if (!recipes.Any())
             return "No recipes found.";
 
-        var startPage = _contentRepository.Get<StartPage>(SiteDefinition.Current.StartPage);
+        var site = _siteDefinitionRepository.List().FirstOrDefault()
+            ?? throw new InvalidOperationException("No site definition found.");
+        var startPage = _contentRepository.Get<StartPage>(site.StartPage);
 
         int created = 0, updated = 0, failed = 0;
 
